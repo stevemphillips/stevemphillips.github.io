@@ -1,129 +1,145 @@
-# 4CM + W/D/W Electric Guitar Rig Architecture
-## Final Definitive Engineering Blueprint
+# **2026 Guitar Rig**
 
-This document serves as the absolute single source of truth for the signal routing, preset logic, and custom hardware integration of a hybrid 4-Cable Method (4CM) and Wet/Dry/Wet (W/D/W) switching system. 
+## **Description**
 
-### System Design Overview
-The rig is physically optimized for a **Temple Audio Duo 34** pedalboard and a **4U Gator rolling rack bag**. 
+This rig is based around an AMT Electronics SH-100-4R 4-channel 100 watt amplifier. It is wired using the four cable method and is set up in a wet/dry/wet configuration.
 
-The system logic is controlled via a **Carl Martin Octa-Switch "The Strip"**. Because the Octa-Switch transmits fixed, non-configurable MIDI Program Change (PC) commands mapping strictly to the active preset bank (e.g., Preset 1 sends PC 1, Preset 2 sends PC 2), the system topology relies on mapping the corresponding patches directly inside the **Boss SDE-3000D** dual digital delay to mirror these incoming integers.
+## **Components**
 
----
+### **Rack**
 
-## Part 1: Main System Signal Flow & Bus Topography
+- AMT Electronics SH-100-4R 4-channel 100 watt 1U head.
 
-The audio signal flow is divided into distinct functional blocks to optimize dynamic tracking, isolate high-gain preamplification, and distribute an expansive stereo image while maintaining a punchy, phase-coherent center dry signal.
+- Behringer Parametric EQ
 
-### 1. The Front-End Tracking Engine
-*   **Input Stage:** Guitar $\rightarrow$ **D'Addario Tuner** Input.
-*   **Gain Dynamics:** D'Addario Tuner Output $\rightarrow$ **Boss FV-30 Volume Pedal** Input $\rightarrow$ **JHS Buffered Splitter** Input.
-*   **Parallel Tracking Path (Output A):** Connects to the **Amazon Basics Compressor** Input $\rightarrow$ Compressor Output $\rightarrow$ **Noise Gate Key/Input** jack. 
-    *   *Technical Design Note:* This architecture uses a dedicated clean tracking line to heavily increase the gate's dynamic tracking sensitivity without compressing the audible audio path.
-*   **Main Audio Path (Output B):** Connects directly into the **Carl Martin Octa-Switch "The Strip"** Main Input to drive the core effects blocks.
+- BBE Sonic Maximizer
 
-### 2. Switcher Loop Allocation Matrix
+### **Pedalboard**
 
-| Loop | Hardware Unit | Audio Path Context | Preset Logic / Governance |
-| :--- | :--- | :--- | :--- |
-| **Loop 1** | Aion FX Convex | Dinosaural OTC-201 Clone Parallel Opto-Compressor. | As needed for clean/rhythm dynamics. |
-| **Loop 2** | GUPTech Le Chiou | Tight Overdrive / Distortion voicing. | Enabled for mid-to-high gain staging. |
-| **Loop 3** | *Empty* | Open spare loop for expansion. | Permanently bypassed. |
-| **Loop 4** | **AMT Stonehead SH-100-4R** | Preamp Stage (Send $\rightarrow$ Front Input; Head FX Loop 1 Send $\rightarrow$ Switcher Return). | **ON** for all presets using the core preamp. |
-| **Loop 5** | TC Electronic Quintessence | Pitch Harmonizer (Mono-to-Mono infrastructure). | **ON** exclusively for dual-guitar solo tracking; **OFF** for rhythm. |
-| **Loop 6** | Hardwire Noise Gate | Clamping engine (Send $\rightarrow$ Gate Input; Gate Output $\rightarrow$ Return). | **ON** for high-gain patches to clamp preamp/harmony hiss; **OFF** for cleans. |
-| **Loop 7** | **DIY Custom Isolation Box** | Parallel W/D/W Split & Ground Isolation Engine (See Part 3). | **PERMANENTLY ON** to sustain dry amp feed and downstream routing. |
-| **Loop 8** | **Boss SDE-3000D** | Ambient Space & Wet Stereo Imaging Stage. | **ON** for all ambient, delay, and stereo chorus configurations. |
+- Temple Audio Duo 34 pedalboard
 
-### 3. Downstream Wet/Dry Separation
-*   **Dry Output Path:** Extracted out of the **DIY Box Direct Out** $\rightarrow$ Switcher Loop 7 Return to complete the internal trace. The final **DIY Box Isolated Out** travels down the 8-channel snake to the **AMT Head FX Loop 1 Return**, feeding the fully harmonized, gated dry tone directly to the center **2x12 Cabinet** while completely shattering the ground loop hum.
-*   **Wet Output Path:** Inside Loop 8, a mono TS patch cable feeds the **Boss SDE-3000D Input L/Mono** (split internally). The **Boss SDE-3000D Outputs (L & R)** output via dual mono TS cables into a **Dual-TS-to-TRS Insert Cable** back to the Loop 8 Return. 
-*   **Power Amplification:** The Strip's Master Outputs 1 & 2 connect via the snake to the **ISP Technologies Stealth Pro Inputs 1 & 2** $\rightarrow$ driving the Left and Right **Custom 1x12 Monitor Wedges**.
+- Cioks power supply
 
----
+- JHS Buffereed Splitter
 
-## Part 2: Hardware Settings & Rack Processing
+- D’Addario pedal tuner
 
-### 1. AMT Stonehead FX Loop 2 (Dry Processing Bus)
-To shape the central dry projection without degrading or phase-cancelling the wet stereo delay trails, secondary post-preamp processing is isolated strictly to the dry backline enclosure:
-$$\text{AMT FX Loop 2 Send} \longrightarrow \text{Parametric EQ Input} \longrightarrow \text{BBE Sonic Maximizer Input} \longrightarrow \text{AMT FX Loop 2 Return}$$
+- Boss FV-30H (May swap out for George Dennis GD65 wah/volume)
 
-### 2. Boss SDE-3000D Digital Parameters
-The digital processor must be configured globally and per patch to prevent dry signal leakage and maintain spatial independence.
+- Carl Martin Octa-Switch “The Strip”
 
-*   **Direct Mute (Kill-Dry):** `DIR.MUTE` must be set to `ON` inside the `[SETUP] -> MASTER` utility menu. This locks out any duplicate dry electric signal from leaking into the wet wedges, ensuring 100% studio-grade physical separation.
-*   **Internal Routing Structure:** Set `STRUCT` to `PARA 2` (Parallel 2) in the setup menu. This isolates Delay Engine 1 and Delay Engine 2 so they simultaneously receive the isolated input signal and process their respective stereo fields independently.
-*   **Dual Stereo Preset Configuration (Chorus + Delay Patches):**
-    *   **Engine 1 (Stereo Chorus Role):** Configure `TIME` parameter between `10 ms` and `25 ms`. Enable LFO modulation (`MOD`), dialing a slow rate and deep depth. Toggle `PHASE` (Output Phase Reverse) to `ON` on a single channel to achieve an ultra-wide psychoacoustic chorus spread.
-    *   **Engine 2 (Stereo Delay Role):** Configure traditional rhythmic reflections (e.g., `350 ms`) with feedback and wet mix levels balanced to taste.
+  - Loop switcher with relay amp control
 
----
+- AionFX Convex compressor (Dinosaural OTC-201 clone)
 
-## Part 3: DIY 3-Connector Isolation Box Build (Triad TY-250P)
+- GUPTech Le Chiou (Friedman Buxom Boost clone)
 
-By utilizing three audio jacks instead of two, the Triad TY-250P audio transformer circuit handles the parallel signal split natively inside a single shielded project enclosure.
+- TC Electronic Quintessence harmonizer
 
-```text
-               CUSTOM ENCLOSURE INTERNAL CIRCUIT SCHEMA
+- GUPTech SUN noise gate
 
-         INPUT JACK                        DIRECT OUTPUT JACK
-      (Standard Metal)                      (Standard Metal)
-    +-----------------+                  +--------------------+
-    |                 |                  |                    |
-    |   TIP (Signal)  |---+----------->  |   TIP (To Loop 7   |
-    |                 |   |              |        Return)     |
-    |                 |   |              |                    |
-    | SLEEVE (Ground) |---+----------->  | SLEEVE (Ground)    |
-    +-----------------+   |              +--------------------+
-          |               |                         |
-   [Bolted to Case]       |                  [Bolted to Case]
-          |               |                         |
-          +---------------+                         |
-          |                                         |
-          v                                         v
-   (Acts as RF Shield)                      (Shared Box Shield)
-          |
-          +-------> [ Pin 2 ] (Primary +)
-          +-------> [ Pin 4 ] (Primary -)
- 
- ==========================================================================
-                     [ TRIAD TY-250P TRANSFORMER COILS ]
-                      * Pins 1 & 3 are left unconnected
-                      * Jumper wire connects Pin 6 directly to Pin 7
- ==========================================================================
+  - Key in feed has an Amazon Basics compressor in line to increase sensitivity)
 
-                           [ Pin 5 ] (Secondary +)
-                           [ Pin 8 ] (Secondary -)
-                               |
-                               v
-                  +--------------------------+
-                  |   DPDT PHASE REVERSE     |
-                  |     SWITCH ENGINE        |
-                  +--------------------------+
-                               |
-                               v
-                     ISOLATED OUTPUT JACK
-                    (Cliff / Nylon Washers)
-                  +--------------------------+
-                  |  TIP (To Phase Switch)   |
-                  |                          |
-                  |  SLEEVE (To Phase Switch)|
-                  +--------------------------+
-                               |
-                     [Completely Insulated] (Breaks the Ground Loop)
-```
+- Custom passive splitter with output transformer isolated.
 
-### DPDT Phase Inversion Switch Schematic
-```text
-  TOP ROW:      [ Pin 1 ] ──(Crisscross Jumper)── [ Pin 6 ]
-                   │                                 │
-                   └─► To Isolated Jack TIP          │
-                                                     │
-  MIDDLE ROW:   [ Pin 2 ] ◄── From Trans. Pin 5      │
-                [ Pin 5 ] ◄── From Trans. Pin 8      │
-                                                     │
-  BOTTOM ROW:   [ Pin 3 ] ──(Crisscross Jumper)── [ Pin 4 ]
-                   │
-                   └─► To Isolated Jack SLEEVE
-```
-***
+- Boss SDE-3000D delay (Also provides chorus and flange)
 
+- ISP Technologies Stealth Pro stereo guitar power amplifier
+
+- Custom clone of the Mojotone Slammins 2x12” cab loaded with Celestion G12K-85 speakers.
+
+- Two 1x12” rebuilt floor monitors loaded loaded with Celestion Seventy 80 speakers.
+
+**Part 1: Main System Signal Flow**
+
+**1. The Front-End Guitar Split (The Tracking Engine)**
+
+- **Guitar** → **D'Addario Tuner Input**
+
+- **D'Addario Tuner Output** → **Boss FV-30 Volume Pedal Input**
+
+- **Boss FV-30 Volume Pedal Output** → **JHS Buffered Splitter Input**
+
+- **JHS Splitter Output A (The Tracking Line):** Connects straight to the input of the **Amazon Basics Compressor**. The output of the compressor plugs straight into the Noise Gate's **Key / Input** jack *(Crucial: This heavily increases the gate's dynamic tracking sensitivity without compressing your actual audible tone).*
+
+- **JHS Splitter Output B (The Main Tone Line):** Connects straight into Carl Martin Octa-Switch "The Strip" **Main Board Input** to drive your effects blocks.
+
+**2. The Front-of-Amp Drive Section (Loops 1–3)**
+
+- **Loop 1:** Aion FX Convex *(Dinosaural OTC-201 clone (Parallel Opto-Compressor))*.
+
+- **Loop 2:** GUPTech Le Chiou *(Friedman Buxom Boost clone)*.
+
+- **Loop 3:** *Empty / Open Spare.*
+
+**3. The Switchable AMT Preamp (Loop 4)**
+
+- **Loop 4 Send** → **AMT Stonehead SH-100-4R Main Front Input**
+
+- **AMT Head FX Loop 1 Send** → **Behringer Parametric EQ** → **The Strip's Loop 4 Return**
+
+- *Preset Logic: Turn Loop 4 ON for all presets.*
+
+**4. The TC Electronic Quintessence Harmony Loop (Loop 5)**
+
+- **Loop 5 Send** → **TC Electronic Quintessence Input** *(Mono)*
+
+- **TC Electronic Quintessence Output** → **The Strip's Loop 5 Return** *(Mono)*
+
+- *Preset Logic: Loop 5 ON for dual-guitar solo presets. Loop 5 OFF for regular rhythm and lead parts.*
+
+**5. The Switchable Noise Gate Clamping Loop (Loop 6)**
+
+- **Loop 6 Send** → Noise Gate **Gate Input** jack
+
+- **Noise Gate Output** jack → **Loop 6 Return**
+
+- *Preset Logic: Loop 6 ON for high-gain channels. Loop 6 OFF for clean channels.*
+
+**6. The Master W/D/W Split & Isolation Box (Loop 7)**
+
+Custom DIY box splits and isolates the signal natively inside its enclosure:
+
+- **The Strip's Loop 7 Send** → Connected to **DIY Box Input**.
+
+- **DIY Box Direct Out** → Connects via a short patch cable straight back into **The Strip's Loop 7 Return**.
+
+- **DIY Box Isolated Out** → Connects via 8-channel snake to **AMT Head FX Loop Return**.
+
+- *Preset Logic: Loop 7 must remain permanently ON for every preset.*
+
+**7. The Wet Stereo Delay Section (Loop 8)**
+
+- **Loop 8 Send:** → **Boss SDE-3000D Input L/Mono**.
+
+- **Boss SDE-3000D Outputs (L & R):** **Dual-TS-to-TRS Insert Cable** → **The Strip's Loop 8 Return**.
+
+- **The Strip's Master Outputs 1 & 2** → Connect directly down snake to **ISP Technologies Stealth Pro Inputs 1 & 2** → **Left and Right Custom 1x12 Monitor Wedges**
+
+- **AMT Preamp Out** → **BBE Sonic Maximizer Input** → **AMT Power Amp In**.
+
+**Part 2: 6-Channel Snake Connection Matrix**
+
+|                   |                                                       |                                                   |                               |                                                                        |
+|-------------------|-------------------------------------------------------|---------------------------------------------------|-------------------------------|------------------------------------------------------------------------|
+| **SNAKE CHANNEL** | **OUTGOING SIGNAL FROM (PEDALBOARD)**                 | **INCOMING DESTINATION TO (RACK BAG)**            | **PHYSICAL CABLE TRACK TYPE** | **UTILITY**                                                            |
+| **Channel 1**     | **Loop 4 Send**                                       | **AMT Stonehead Main Front Input**                | Mono TS (Shielded Instrument) | Clean Guitar to Amp Input                                              |
+| **Channel 2**     | **AMT Head FX Loop 1 Send** *(From Rack)*             | **The Strip's Loop 4 Return**                     | Mono TS (Shielded Instrument) | Preamp Tone Back to Board                                              |
+| **Channel 3**     | **DIY Box Isolated Out**                              | **AMT Head FX Loop 1 Return**                     | Mono TS (Shielded Instrument) | Gated/Harmonized Tone to Dry Amp                                       |
+| **Channel 4**     | **The Strip's Master Outputs 1 & 2** *(Via Breakout)* | **ISP Stealth Pro Inputs 1 & 2** *(Via Breakout)* | **True TRS Line**             | Consolidated Stereo Delay Feed                                         |
+| **Channel 5**     | **The Strip's EXT SWITCH 1 & 2** *(Via Breakout)*     | **AMT Amp Channel Switching Jack**                | **True TRS Line**             | Relay 1 (Tip) & 2 (Ring): Preamp Channels                              |
+| **Channel 6**     | **The Strip's EXT SWITCH 3 & 4** *(Via Breakout)*     | **AMT Amp Master Volume / Loop Jack**             | **True TRS Line**             | Relay 3 (Tip): **Master Volume 2** / Relay 4 (Ring): Forced Lock State |
+| **Channels 7-8**  | *Open Spares*                                         | *Unplugged / Clean Layout Lines*                  | *Open TRS Tracks*             | **Emergency Stage Backups**                                            |
+
+**Part 4: Temple Audio MOD Panel Layout Blueprint**
+
+|                   |              |                                                   |                                       |                                                  |
+|-------------------|--------------|---------------------------------------------------|---------------------------------------|--------------------------------------------------|
+| **SIDE MOD UNIT** | **MOD JACK** | **INTERNAL PEDALBOARD CONNECTION**                | **EXTERNAL SNAKE LINE (TO RACK BAG)** | **FUNCTION**                                     |
+| **4X MOD**        | **Jack A**   | The Strip's Loop 4 Send                           | **Snake Channel 1**                   | Clean Guitar to AMT Input                        |
+|                   | **Jack B**   | The Strip's Loop 4 Return                         | **Snake Channel 2**                   | Preamp Tone Back to Board                        |
+|                   | **Jack C**   | DIY Box Isolated Out                              | **Snake Channel 3**                   | Gated/Harmonized Tone to Dry Amp                 |
+|                   | **Jack D**   | The Strip's Master Outputs 1 & 2 *(Via Breakout)* | **Snake Channel 4**                   | Stereo Delay Feed *(TRS Line)*                   |
+|                   |              |                                                   |                                       |                                                  |
+| **2X MOD**        | **Jack 1**   | The Strip's EXT SWITCH 1 & 2 *(Via Breakout)*     | **Snake Channel 5**                   | Relay Control: Channels *(TRS Line)*             |
+|                   | **Jack 2**   | The Strip's EXT SWITCH 3 & 4 *(Via Breakout)*     | **Snake Channel 6**                   | Relay Control: Volume & Forced Loop *(TRS Line)* |
