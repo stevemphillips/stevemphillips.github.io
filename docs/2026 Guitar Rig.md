@@ -1,12 +1,12 @@
-# **2026 Guitar Rig**
+# 2026 Guitar Rig
 
-## **Description**
+## Description
 
 This rig is based around an AMT Electronics SH-100-4R 4-channel 100 watt amplifier. It is wired using the four cable method and is set up in a wet/dry/wet configuration.
 
-## **Components**
+## Components
 
-### **Rack**
+### Rack
 
 - AMT Electronics SH-100-4R 4-channel 100 watt 1U head.
 
@@ -22,7 +22,7 @@ This rig is based around an AMT Electronics SH-100-4R 4-channel 100 watt amplifi
 
 - JHS Buffereed Splitter
 
-- D’Addario pedal tuner
+- D'Addario pedal tuner
 
 - Boss FV-30H (May swap out for George Dennis GD65 wah/volume)
 
