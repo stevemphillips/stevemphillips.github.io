@@ -8,3 +8,5 @@ node_modules/
 .vscode/
 *.tmp
 *~
+# SoloMD workspace metadata — per-device, do not sync.
+.solomd/
