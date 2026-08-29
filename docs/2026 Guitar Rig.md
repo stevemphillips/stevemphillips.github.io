@@ -1,5 +1,5 @@
 # 2026 Guitar Rig
-
+test
 ## Description
 
 This rig is based around an AMT Electronics SH-100-4R 4-channel 100 watt amplifier. It is wired using the four cable method and is set up in a wet/dry/wet configuration.
