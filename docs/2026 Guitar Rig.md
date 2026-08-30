@@ -50,7 +50,7 @@ This rig is based around an AMT Electronics SH-100-4R 4-channel 100 watt amplifi
 
 - Two 1x12” rebuilt floor monitors loaded loaded with Celestion Seventy 80 speakers.
 
-**Part 1: Main System Signal Flow**
+#### Part 1: Main System Signal Flow
 
 **1. The Front-End Guitar Split (The Tracking Engine)**
 
@@ -118,7 +118,7 @@ Custom DIY box splits and isolates the signal natively inside its enclosure:
 
 - **AMT Preamp Out** → **BBE Sonic Maximizer Input** → **AMT Power Amp In**.
 
-**Part 2: 6-Channel Snake Connection Matrix**
+#### Part 2: 6-Channel Snake Connection Matrix
 
 |                   |                                                       |                                                   |                               |                                                                        |
 |-------------------|-------------------------------------------------------|---------------------------------------------------|-------------------------------|------------------------------------------------------------------------|
@@ -131,7 +131,7 @@ Custom DIY box splits and isolates the signal natively inside its enclosure:
 | **Channel 6**     | **The Strip's EXT SWITCH 3 & 4** *(Via Breakout)*     | **AMT Amp Master Volume / Loop Jack**             | **True TRS Line**             | Relay 3 (Tip): **Master Volume 2** / Relay 4 (Ring): Forced Lock State |
 | **Channels 7-8**  | *Open Spares*                                         | *Unplugged / Clean Layout Lines*                  | *Open TRS Tracks*             | **Emergency Stage Backups**                                            |
 
-**Part 4: Temple Audio MOD Panel Layout Blueprint**
+#### Part 3: Temple Audio MOD Panel Layout Blueprint
 
 |                   |              |                                                   |                                       |                                                  |
 |-------------------|--------------|---------------------------------------------------|---------------------------------------|--------------------------------------------------|
