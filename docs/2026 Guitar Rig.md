@@ -38,7 +38,7 @@ This rig is based around an AMT Electronics SH-100-4R 4-channel 100 watt amplifi
 
 - GUPTech SUN noise gate
 
-  - Key in feed has an Amazon Basics compressor in line to increase sensitivity)
+  - Key in is fed from the JHS Buffered Spliter via an Amazon Basics compressor  to increase sensitivity
 
 - Custom passive splitter with output transformer isolated.
 
